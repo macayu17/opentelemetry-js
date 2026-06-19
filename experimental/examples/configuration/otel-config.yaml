@@ -1,0 +1,33 @@
+file_format: "1.1"
+disabled: false
+resource:
+  attributes:
+    - name: service.name
+      value: configuration-example
+tracer_provider:
+  processors:
+    - batch:
+        schedule_delay: 1000
+        exporter:
+          otlp_http:
+            endpoint: http://localhost:4318/v1/traces
+            headers:
+              - name: x-api-key
+                value: ${OTEL_API_KEY:-no-key-set}
+meter_provider:
+  readers:
+    - periodic:
+        interval: 1000
+        exporter:
+          otlp_http:
+            endpoint: http://localhost:4318/v1/metrics
+logger_provider:
+  processors:
+    - batch:
+        schedule_delay: 1000
+        exporter:
+          otlp_http:
+            endpoint: http://localhost:4318/v1/logs
+            headers:
+              - name: x-api-key
+                value: ${OTEL_API_KEY:-no-key-set}

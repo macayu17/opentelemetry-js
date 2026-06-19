@@ -1,0 +1,7 @@
+services:
+  otel-collector:
+    image: otel/collector-contrib:0.154.0
+    volumes:
+      - "./collector-config.yaml:/etc/otelcol/config.yaml"
+    ports:
+      - 4318:4318

@@ -126,7 +126,18 @@ One intentional exception in both paths: `AttributeNameValue.type` is **not** de
 
 ## Supported schema versions
 
-- `1.0`
+- `1.1`
+
+## Current limitations
+
+The following configuration fields are parsed and validated by the schema but **not yet wired to SDK components** via `startNodeSDK()`:
+
+- **`otlp_file/development` exporter** - not implemented for traces, metrics, or logs. A `diag.warn` is emitted and the exporter is skipped.
+- **`zipkin` exporter** - available via `OTEL_TRACES_EXPORTER=zipkin` but not via file-based config.
+- **`composite/development` sampler** - the `rule_based` composite sampler is parsed by the schema but not handled by `buildSamplerFromConfig()`. Configured rules are ignored.
+- **Metric producers** - only `opencensus` is supported (requires `@opentelemetry/shim-opencensus`). Other producer types emit a warning.
+- **Cardinality limits** on periodic metric readers are not yet applied (see [#6425](https://github.com/open-telemetry/opentelemetry-js/issues/6425)).
+- **`forceFlushTimeoutMillis`** on the logger provider is not configurable via declarative config.
 
 ## Useful links
 
